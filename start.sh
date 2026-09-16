@@ -13,7 +13,12 @@ if [ ! -s "$encryption_env" ]; then
     echo "export ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=$(openssl rand -hex 32)"
     echo "export ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=$(openssl rand -hex 32)"
     echo "export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=$(openssl rand -hex 32)"
+    echo "export SECRET_KEY_BASE=$(openssl rand -hex 64)"
   } > "$encryption_env"
+fi
+if ! grep -q '^export SECRET_KEY_BASE=' "$encryption_env"; then
+  umask 077
+  echo "export SECRET_KEY_BASE=$(openssl rand -hex 64)" >> "$encryption_env"
 fi
 . "$encryption_env"
 
@@ -24,7 +29,6 @@ export POSTGRES_USER="${CLOUDRON_POSTGRESQL_USERNAME}"
 export POSTGRES_PASSWORD="${CLOUDRON_POSTGRESQL_PASSWORD}"
 export POSTGRES_DB="${CLOUDRON_POSTGRESQL_DATABASE}"
 export REDIS_URL="${CLOUDRON_REDIS_URL}"
-export SECRET_KEY_BASE="${SECRET_KEY_BASE:-$(head -c 64 /dev/urandom | od -An -tx1 | tr -d ' \n')}"
 export ACTIVE_STORAGE_SERVICE="local"
 
 cd /rails

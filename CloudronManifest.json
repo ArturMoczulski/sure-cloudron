@@ -7,7 +7,7 @@
   "manifestVersion": 2,
   "minBoxVersion": "8.0.0",
   "httpPort": 3000,
-  "healthCheckPath": "/api/health",
+  "healthCheckPath": "/",
   "addons": {
     "localstorage": {},
     "postgresql": {},

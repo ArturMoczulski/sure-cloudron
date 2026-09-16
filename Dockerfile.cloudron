@@ -2,7 +2,11 @@ FROM ghcr.io/we-promise/sure:stable
 
 USER root
 COPY start.sh /rails/start-cloudron.sh
-RUN chmod 0755 /rails/start-cloudron.sh && mkdir -p /app/data && chown -R 1000:1000 /app/data
+RUN chmod 0755 /rails/start-cloudron.sh \
+    && mv /rails/storage /rails/storage.image \
+    && ln -s /app/data /rails/storage \
+    && mkdir -p /app/data \
+    && chown -R 1000:1000 /app/data
 
 ENV SELF_HOSTED=true \
     ONBOARDING_STATE=open \

@@ -1,0 +1,11 @@
+FROM cloudron/base:5.1.0@sha256:1c0666c9abe9e2090d33686826d4e97769b799124573118d41e0d7485135748e
+
+WORKDIR /app/code
+COPY package.json server.js ./
+COPY public ./public
+RUN mkdir -p /app/data && chown -R cloudron:cloudron /app/code /app/data
+
+ENV NODE_ENV=production
+EXPOSE 3000
+USER cloudron
+CMD ["node", "server.js"]

@@ -4,6 +4,19 @@ set -eu
 mkdir -p /app/data
 chown -R 1000:1000 /app/data || true
 
+# Keep provider credentials encrypted at rest. These values are generated once
+# and retained in Cloudron's backed-up local storage across app updates.
+encryption_env=/app/data/encryption.env
+if [ ! -s "$encryption_env" ]; then
+  umask 077
+  {
+    echo "export ACTIVE_RECORD_ENCRYPTION_PRIMARY_KEY=$(openssl rand -hex 32)"
+    echo "export ACTIVE_RECORD_ENCRYPTION_DETERMINISTIC_KEY=$(openssl rand -hex 32)"
+    echo "export ACTIVE_RECORD_ENCRYPTION_KEY_DERIVATION_SALT=$(openssl rand -hex 32)"
+  } > "$encryption_env"
+fi
+. "$encryption_env"
+
 # Cloudron exposes addon connection details through CLOUDRON_* variables.
 export DB_HOST="${CLOUDRON_POSTGRESQL_HOST}"
 export DB_PORT="${CLOUDRON_POSTGRESQL_PORT:-5432}"

@@ -1,8 +1,8 @@
 FROM ghcr.io/we-promise/sure:stable
 
 USER root
-COPY start.sh /app/code/start.sh
-RUN chmod 0755 /app/code/start.sh && mkdir -p /app/data && chown -R cloudron:cloudron /app/data
+COPY start.sh /rails/start-cloudron.sh
+RUN chmod 0755 /rails/start-cloudron.sh && mkdir -p /app/data && chown -R 1000:1000 /app/data
 
 ENV SELF_HOSTED=true \
     ONBOARDING_STATE=open \
@@ -11,4 +11,4 @@ ENV SELF_HOSTED=true \
     PORT=3000
 
 EXPOSE 3000
-CMD ["/app/code/start.sh"]
+CMD ["/rails/start-cloudron.sh"]

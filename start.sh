@@ -2,7 +2,7 @@
 set -eu
 
 mkdir -p /app/data
-chown -R cloudron:cloudron /app/data
+chown -R 1000:1000 /app/data || true
 
 # Cloudron exposes addon connection details through CLOUDRON_* variables.
 export DB_HOST="${CLOUDRON_POSTGRESQL_HOST}"

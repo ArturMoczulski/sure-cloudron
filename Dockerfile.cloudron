@@ -5,6 +5,8 @@ COPY start.sh /rails/start-cloudron.sh
 RUN chmod 0755 /rails/start-cloudron.sh \
     && mv /rails/storage /rails/storage.image \
     && ln -s /app/data /rails/storage \
+    && mv /rails/tmp /rails/tmp.image \
+    && ln -s /tmp /rails/tmp \
     && mkdir -p /app/data \
     && chown -R 1000:1000 /app/data
 

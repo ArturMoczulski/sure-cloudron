@@ -1,11 +1,14 @@
-FROM cloudron/base:5.1.0@sha256:1c0666c9abe9e2090d33686826d4e97769b799124573118d41e0d7485135748e
+FROM ghcr.io/we-promise/sure:stable
 
-WORKDIR /app/code
-COPY package.json server.js ./
-COPY public ./public
-RUN mkdir -p /app/data && chown -R cloudron:cloudron /app/code /app/data
+USER root
+COPY start.sh /app/code/start.sh
+RUN chmod 0755 /app/code/start.sh && mkdir -p /app/data && chown -R cloudron:cloudron /app/data
 
-ENV NODE_ENV=production
+ENV SELF_HOSTED=true \
+    ONBOARDING_STATE=open \
+    RAILS_FORCE_SSL=false \
+    RAILS_ASSUME_SSL=true \
+    PORT=3000
+
 EXPOSE 3000
-USER cloudron
-CMD ["node", "server.js"]
+CMD ["/app/code/start.sh"]
